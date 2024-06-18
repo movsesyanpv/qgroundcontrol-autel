@@ -71,7 +71,8 @@ check64BitUninstall:
   StrCmp $R0 "" doInstall
 
 doUninstall:
-  DetailPrint "Uninstalling previous version..."  ExecWait "$R0 /S -LEAVE_DATA=1 _?=$INSTDIR"
+  DetailPrint "Uninstalling previous version..."
+  ExecWait "$R0 /S -LEAVE_DATA=1 _?=$INSTDIR"
   IntCmp $0 0 doInstall
 
   MessageBox MB_OK|MB_ICONEXCLAMATION \
@@ -132,6 +133,12 @@ done:
   SetRegView lastused
 SectionEnd 
 
+Section "Visual Studio Runtime" vcredist
+  SetOutPath "$INSTDIR"
+  File "${DESTDIR}\bin\vc_redist.x64.exe"
+  ExecWait "$INSTDIR\bin\vc_redist.x64.exe /install /quiet /norestart"
+SectionEnd
+
 Section "Uninstall"
   SetRegView 64
   ${GetParameters} $R0
@@ -153,10 +160,10 @@ Section "create Start Menu Shortcuts"
   SetRegView 64
   SetShellVarContext all
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APPNAME}.lnk" "$INSTDIR\${EXENAME}.exe" "" "$INSTDIR\${EXENAME}.exe" 0
-  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APPNAME} (GPU Compatibility Mode).lnk" "$INSTDIR\${EXENAME}.exe" "-angle" "$INSTDIR\${EXENAME}.exe" 0
+  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APPNAME}.lnk" "$INSTDIR\bin\${EXENAME}.exe" "" "$INSTDIR\bin\${EXENAME}.exe" 0
+  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APPNAME} (GPU Compatibility Mode).lnk" "$INSTDIR\bin\${EXENAME}.exe" "-angle" "$INSTDIR\bin\${EXENAME}.exe" 0
   !insertmacro DemoteShortCut "$SMPROGRAMS\$StartMenuFolder\${APPNAME} (GPU Compatibility Mode).lnk"
-  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APPNAME} (GPU Safe Mode).lnk" "$INSTDIR\${EXENAME}.exe" "-swrast" "$INSTDIR\${EXENAME}.exe" 0
+  CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APPNAME} (GPU Safe Mode).lnk" "$INSTDIR\bin\${EXENAME}.exe" "-swrast" "$INSTDIR\bin\${EXENAME}.exe" 0
   !insertmacro DemoteShortCut "$SMPROGRAMS\$StartMenuFolder\${APPNAME} (GPU Safe Mode).lnk"
 SectionEnd
 

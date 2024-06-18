@@ -37,7 +37,7 @@ void KMLPlanDomDocument::_addFlightPath(Vehicle* vehicle, QList<MissionItem*> rg
     addTextElement(itemFolderElement, "name", "Items");
 
     QDomElement flightPathElement = createElement("Placemark");
-    _rootDocumentElement.appendChild(flightPathElement);
+    //_rootDocumentElement.appendChild(flightPathElement);
 
     addTextElement(flightPathElement, "styleUrl",     QStringLiteral("#%1").arg(_missionLineStyleName));
     addTextElement(flightPathElement, "name",         "Flight Path");
